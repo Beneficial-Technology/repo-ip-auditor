@@ -1,6 +1,6 @@
 {
   "name": "@beneficialtechnology/repo-ip-auditor",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Audit a git repository for IP chain-of-title gaps and copyleft exposure before diligence does.",
   "type": "module",
   "license": "MIT",
