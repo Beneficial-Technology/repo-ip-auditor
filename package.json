@@ -1,0 +1,63 @@
+{
+  "name": "@beneficialtech/repo-ip-auditor",
+  "version": "0.1.0",
+  "description": "Audit a git repository for IP chain-of-title gaps and copyleft exposure before diligence does.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Beneficial Technology",
+  "homepage": "https://beneficial.technology/tools/repo-ip-auditor",
+  "bin": {
+    "repo-ip-audit": "dist/cli.js"
+  },
+  "main": "dist/audit.js",
+  "types": "dist/audit.d.ts",
+  "files": [
+    "dist",
+    "action.yml",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
+    "audit:self": "node dist/cli.js .",
+    "test": "node dist/cli.js . --offline --min-score 1"
+  },
+  "keywords": [
+    "ip",
+    "license",
+    "copyleft",
+    "agpl",
+    "due-diligence",
+    "git",
+    "compliance",
+    "sbom"
+  ],
+  "devDependencies": {
+    "@types/node": "22.7.5",
+    "@types/react": "^18.3.12",
+    "typescript": "5.6.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/audit.d.ts",
+      "import": "./dist/audit.js"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Beneficial-Technology/repo-ip-auditor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Beneficial-Technology/repo-ip-auditor/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

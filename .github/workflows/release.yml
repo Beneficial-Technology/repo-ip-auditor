@@ -1,0 +1,42 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+  id-token: write        # npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: npm ci
+      - run: npm run build
+
+      # The GitHub Action runs from committed dist/, so a stale dist ships a
+      # different auditor than the source claims. Fail the release instead.
+      - name: Verify committed dist matches source
+        run: |
+          if ! git diff --exit-code --stat dist; then
+            echo "::error::dist/ is out of date. Run npm run build and commit dist/ before tagging."
+            exit 1
+          fi
+
+      - run: npm test
+
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # Move the floating major tag the Action reference points at.
+      - name: Move v0 tag
+        run: |
+          git tag -f v0
+          git push origin v0 --force

@@ -1,0 +1,47 @@
+name: 'Repo IP Auditor'
+description: 'Audit commit history and dependencies for IP chain-of-title gaps and copyleft exposure.'
+author: 'Beneficial Technology'
+branding:
+  icon: 'shield'
+  color: 'yellow'
+inputs:
+  path:
+    description: 'Directory to audit.'
+    required: false
+    default: '.'
+  domains:
+    description: 'Comma separated company email domains. Inferred from history when empty.'
+    required: false
+    default: ''
+  min-score:
+    description: 'Fail the job when the score falls below this. 0 disables the gate.'
+    required: false
+    default: '0'
+  company:
+    description: 'Copyright holder to treat as your own when scanning file headers.'
+    required: false
+    default: ''
+  headers:
+    description: 'Scan file headers for copyleft notices and third-party copyright holders.'
+    required: false
+    default: 'true'
+  offline:
+    description: 'Skip registry lookups and read licenses from the installed tree only.'
+    required: false
+    default: 'false'
+outputs:
+  score:
+    description: 'IP health score, 0 to 100.'
+  grade:
+    description: 'A through F.'
+  unassigned:
+    description: 'Contributors with no assignment evidence.'
+  copyleft:
+    description: 'Copyleft dependencies found.'
+  header_findings:
+    description: 'File header findings from the deep scan.'
+  report:
+    description: 'Full markdown report.'
+runs:
+  using: 'node20'
+  main: 'dist/action.js'

@@ -1,0 +1,17 @@
+name: IP audit
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci && npm run build
+      - run: node dist/cli.js . --format md --out $GITHUB_STEP_SUMMARY --min-score 0
