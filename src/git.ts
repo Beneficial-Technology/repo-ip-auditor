@@ -35,7 +35,7 @@ export function readHistory(opts: HistoryOptions): History {
     }
   } catch { /* older git */ }
 
-  const args = ['log', '--use-mailmap', `--pretty=format:${RS}%H${FS}%an${FS}%ae${FS}%aI${FS}%B`];
+  const args = ['log', '--use-mailmap', `--pretty=format:${RS}%H${FS}%aN${FS}%aE${FS}%aI${FS}%B`];
   if (opts.since) args.push(`--since=${opts.since}`);
   if (opts.maxCommits) args.push(`--max-count=${opts.maxCommits}`);
   const raw = git(args, cwd);
