@@ -30,12 +30,24 @@ const LICENSE_TEXT = [
     [/Eclipse Public License/i, 'EPL'],
     [/Server Side Public License/i, 'SSPL'],
 ];
-const COPYRIGHT = /(?:^|\s)(?:©|\(c\)|Copyright(?:\s+\(c\))?)\s*(?:©\s*)?(?:\d{4}(?:\s*[-–,]\s*\d{4})*\s*[, ]*)?(?:by\s+)?([A-Z][^\n\r*/#;]{2,60})/gi;
+// Deliberately case-sensitive. With the /i flag the [A-Z] anchor stops doing
+// any work, and ordinary prose containing the word "copyright" gets captured
+// as a rights holder.
+const COPYRIGHT = /(?:^|\s)(?:©|\(c\)|\(C\)|Copyright|COPYRIGHT)(?:\s*\((?:c|C)\))?\s*(?:©\s*)?(?:\d{4}(?:\s*[-–,]\s*\d{4})*\s*[, ]*)?(?:by\s+)?([A-Z][^\n\r*/#;]{2,60})/g;
 /** Holders that say nothing about provenance. */
 const NOISE = /^(the\s+)?(author|authors|contributors|copyright holders?|owner|respective owners|all rights reserved|and contributors|holders?|notice|redistribution|disclaimer|permission|this|above|year|name of)\b/i;
 /** Fragments of permissive license boilerplate that the copyright pattern can
  *  otherwise capture as if they were a holder. */
 const BOILERPLATE = /(holders?\s+and\s+contributors|as\s+is|list of conditions|following disclaimer|warrant|no event shall|provided by)/i;
+/** License headers are comments. Requiring the match to sit on a commented
+ *  line is what stops a scanner from flagging its own license-detection
+ *  tables, and stops any file that merely discusses licensing from being
+ *  reported as carrying that license. */
+const COMMENT_LINE = /^\s*(\/\/|\/\*|\*|#|--|;|<!--|%)/;
+function onCommentLine(text, index) {
+    const start = text.lastIndexOf('\n', index) + 1;
+    return COMMENT_LINE.test(text.slice(start, index + 1));
+}
 function cleanHolder(raw) {
     return raw
         .replace(/\ball rights reserved\b.*$/i, '')
@@ -66,7 +78,7 @@ export function scanFileHead(path, head, opts) {
         return findings;
     }
     const spdx = SPDX.exec(head);
-    if (spdx) {
+    if (spdx && onCommentLine(head, spdx.index)) {
         const cls = classifyLicense(spdx[1]);
         if (cls === 'agpl' || cls === 'gpl' || cls === 'lgpl' || cls === 'weak' || cls === 'source-available') {
             findings.push({ path, line: lineOf(spdx.index), kind: 'spdx-copyleft', detail: spdx[1].trim(), cls });
@@ -75,7 +87,7 @@ export function scanFileHead(path, head, opts) {
     if (!findings.some(f => f.kind === 'spdx-copyleft')) {
         for (const [re, label] of LICENSE_TEXT) {
             const m = re.exec(head);
-            if (!m)
+            if (!m || !onCommentLine(head, m.index))
                 continue;
             const cls = classifyLicense(label);
             if (cls === 'permissive' || cls === 'unknown')
@@ -89,6 +101,8 @@ export function scanFileHead(path, head, opts) {
     COPYRIGHT.lastIndex = 0;
     let c;
     while ((c = COPYRIGHT.exec(head))) {
+        if (!onCommentLine(head, c.index))
+            continue;
         const holder = cleanHolder(c[1]);
         const lower = holder.toLowerCase();
         if (!holder || holder.length < 3 || NOISE.test(lower) || BOILERPLATE.test(lower) || seen.has(lower))
