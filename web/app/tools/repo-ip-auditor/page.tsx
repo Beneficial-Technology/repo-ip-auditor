@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {
   type AuditReport, type ContributorStatus,
   LICENSE_LABEL, STATUS_LABEL, RUBRIC, verdict, markdown,
-} from '@beneficialtech/repo-ip-auditor/core';
+} from '@beneficialtechnology/repo-ip-auditor/core';
 import { scanRepository } from '@/lib/ip-audit/scan-github';
 import { sampleReport } from '@/lib/ip-audit/sample';
 
@@ -25,7 +25,7 @@ const GRADE_STYLE = (g: string) =>
   : g === 'C' ? 'border-amber-700 bg-amber-950 text-amber-400'
   : 'border-rose-700 bg-rose-950 text-rose-400';
 
-const CLI_COMMAND = 'npx @beneficialtech/repo-ip-auditor . --domains acme.com';
+const CLI_COMMAND = 'npx @beneficialtechnology/repo-ip-auditor . --domains acme.com';
 const ACTION_SNIPPET = 'uses: Beneficial-Technology/repo-ip-auditor@v0';
 
 export default function RepoIPAuditorPage() {

@@ -36,14 +36,14 @@ Skip it with `--no-headers` for a surface scan that matches what the browser can
 ## Install
 
 ```bash
-npm i -g @beneficialtech/repo-ip-auditor
+npm i -g @beneficialtechnology/repo-ip-auditor
 repo-ip-audit .
 ```
 
 Or run it once without installing:
 
 ```bash
-npx @beneficialtech/repo-ip-auditor .
+npx @beneficialtechnology/repo-ip-auditor .
 ```
 
 Requires Node 20 or later and git on the path.

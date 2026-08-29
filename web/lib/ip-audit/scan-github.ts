@@ -2,7 +2,7 @@ import {
   type AuditReport, type Contributor, type Dependency,
   classify, inferDomain, classifyLicense, score, COPYLEFT,
   parseManifestText, MANIFEST_NAMES,
-} from '@beneficialtech/repo-ip-auditor/core';
+} from '@beneficialtechnology/repo-ip-auditor/core';
 
 export class RateLimitError extends Error {}
 export class NotFoundError extends Error {}

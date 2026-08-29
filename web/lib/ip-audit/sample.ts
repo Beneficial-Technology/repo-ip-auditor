@@ -1,7 +1,7 @@
 import {
   type AuditReport, type Contributor, type Dependency,
   classify, classifyLicense, score, COPYLEFT,
-} from '@beneficialtech/repo-ip-auditor/core';
+} from '@beneficialtechnology/repo-ip-auditor/core';
 
 /** The sample is scored by the same function as a live audit, so it cannot
  *  drift from the rubric. Every name and package below is fictional. */

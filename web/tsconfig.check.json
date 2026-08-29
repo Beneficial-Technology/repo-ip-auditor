@@ -4,7 +4,7 @@
     "jsx": "react-jsx", "module": "ESNext", "moduleResolution": "Bundler",
     "strict": true, "noEmit": true, "skipLibCheck": true,
     "types": ["react"],
-    "baseUrl": "..", "paths": { "@/*": ["./web/*"], "@beneficialtech/repo-ip-auditor/core": ["./src/core.ts"] }
+    "baseUrl": "..", "paths": { "@/*": ["./web/*"], "@beneficialtechnology/repo-ip-auditor/core": ["./src/core.ts"] }
   },
   "include": ["."]
 }
